@@ -1,19 +1,27 @@
 <html>
   <head>
     <title>Video Streaming Demonstration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
-    <h1>Video Streaming Demonstration</h1>
-    <div>
-      <img src="{{ url_for('video_feed') }}">
-    </div>
-    <br>
-    <div>
-      <form method="POST" action="/capture_image">
-        Filename: <input type="text" name="filename" required="required"><br>
-        Arguments: <input type="text" name="arguments"><br>
-        <input type="submit" value="Capture Image"></input>
-      </form>
+    <div class="page-content">
+      <h1>Raspberry Pi Camera Streamer</h1>
+      <div>
+        <img src="{{ url_for('video_feed') }}">
+      </div>
+      <br>
+      <div class="form-input">
+        <form method="POST" action="/capture_image">
+          Filename: <input type="text" name="filename" required="required" placeholder="test.jpg"><br>
+          Arguments (<a href="https://www.raspberrypi.org/documentation/raspbian/applications/camera.md" target="_blank">documentation</a>): <input
+            type="text"
+            name="arguments"
+            placeholder="--awb off --width 1920 --height 1080"
+            title="Inputs are passed to raspistill. See documentation for more details."
+          ><br>
+          <input type="submit" value="Capture Image"></input>
+        </form>
+      </div>
     </div>
   </body>
 </html>

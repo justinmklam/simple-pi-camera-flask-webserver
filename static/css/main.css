@@ -1,0 +1,14 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+.page-content {
+    text-align: center
+}
+
+input[type=text] {
+    width: 500px;
+    padding: 5px 5px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
