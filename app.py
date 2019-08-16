@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 from importlib import import_module
+import time
+
 import os
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request, send_file
 
 # import camera driver. Otherwise use pi camera by default
 if os.environ.get('CAMERA'):
@@ -9,6 +11,7 @@ if os.environ.get('CAMERA'):
 else:
     from camera_pi import Camera
 
+import utils
 
 app = Flask(__name__)
 
@@ -33,6 +36,24 @@ def video_feed():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+@app.route('/capture_image', methods=['GET', 'POST'])
+def capture_image():
+    utils.write_boolean_to_file("camera_state", False)
+
+    filename = request.form.get('filename')
+    arguments = request.form.get('arguments')
+
+    cmd = f"raspistill --nopreview -t 1 -o {filename} {arguments}"
+    print(cmd)
+
+    retcode = os.system(cmd)
+
+    print("Return code: %d"%retcode)
+    if retcode == 0:
+        return send_file(filename, mimetype='image/jpg')
+    else:
+        return "Error"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

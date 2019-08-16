@@ -4,6 +4,16 @@
   </head>
   <body>
     <h1>Video Streaming Demonstration</h1>
-    <img src="{{ url_for('video_feed') }}">
+    <div>
+      <img src="{{ url_for('video_feed') }}">
+    </div>
+    <br>
+    <div>
+      <form method="POST" action="/capture_image">
+        Filename: <input type="text" name="filename" required="required"><br>
+        Arguments: <input type="text" name="arguments"><br>
+        <input type="submit" value="Capture Image"></input>
+      </form>
+    </div>
   </body>
 </html>
