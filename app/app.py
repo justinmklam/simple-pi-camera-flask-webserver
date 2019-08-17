@@ -39,21 +39,28 @@ def video_feed():
 
 @app.route('/capture_image', methods=['GET', 'POST'])
 def capture_image():
-    utils.write_boolean_to_file("camera_state", False)
+    # utils.write_boolean_to_file("camera_state", False)
 
-    filename = request.form.get('filename')
+    filename = os.path.expanduser("~/Pictures/" + request.form.get('filename'))
     arguments = request.form.get('arguments')
 
-    cmd = f"raspistill --nopreview -t 1 -o {filename} {arguments}"
-    print(cmd)
+    # cmd = f"raspistill --nopreview -t 1 -o {filename} {arguments}"
+    # print(cmd)
 
-    retcode = os.system(cmd)
+    # retcode = os.system(cmd)
 
-    print("Return code: %d"%retcode)
-    if retcode == 0:
-        return send_file(filename, mimetype='image/jpg')
-    else:
-        return "Error"
+    cam = Camera()
+    photo = cam.get_frame()
+    with open(filename, "wb+") as file:
+        file.write(photo)
+
+    return send_file(filename, mimetype='image/jpg')
+
+    # print("Return code: %d"%retcode)
+    # if retcode == 0:
+        # return send_file(filename, mimetype='image/jpg')
+    # else:
+        # return "Error"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
