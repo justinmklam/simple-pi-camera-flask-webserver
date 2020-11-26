@@ -15,7 +15,7 @@ Install requirements:
 pip install -r requirements.txt
 
 # For local testing
-pip install -r requirements-opencv.txt
+pip install -r requirements-dev.txt
 ```
 
 If not running on a Pi, you can export the following to use your webcam (via OpenCV):
