@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 from importlib import import_module
 import time
-
+import subprocess
 import os
-from flask import Flask, render_template, Response, request, send_file
+from flask import Flask, render_template, Response, request, send_file, jsonify
 
 # import camera driver. Otherwise use pi camera by default
 if os.environ.get('CAMERA'):
@@ -13,7 +13,9 @@ else:
 
 import utils
 
+
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 @app.route('/')
@@ -47,13 +49,19 @@ def capture_image():
     cmd = f"raspistill --nopreview -t 1 -o {filename} {arguments}"
     print(cmd)
 
-    retcode = os.system(cmd)
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
 
-    print("Return code: %d"%retcode)
-    if retcode == 0:
+    print(stdout.decode("utf-8"))
+    if process.returncode == 0:
         return send_file(filename, mimetype='image/jpg')
     else:
-        return "Error"
+        response = {
+            "message": "Error capturing image",
+            "command": cmd,
+            "error": stderr.decode("utf-8")
+        }
+        return jsonify(response), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
