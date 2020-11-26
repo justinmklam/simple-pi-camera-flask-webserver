@@ -39,7 +39,7 @@ Open a browser and navigate to your Pi's address, i.e. `raspberrypi.local:5000`.
 The text input boxes are fed into the `raspistill` command as arguments like so:
 
 ```bash
-raspistill -o test.jpg --awb off --width 1920 --height 1080
+raspistill --no-preview -t 1 -o test.jpg --awb off --width 1920 --height 1080
 ```
 
 ## Acknowledgements
