@@ -56,3 +56,4 @@ target/
 *.jpg
 
 camera_state
+.mypy_cache/
